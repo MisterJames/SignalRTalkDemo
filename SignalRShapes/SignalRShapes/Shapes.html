@@ -1,0 +1,57 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title></title>
+
+    <style>
+        body {
+            background-color: black;
+        }
+
+        #square {
+            width:100px;
+            height:100px;
+            background-color: white;
+        }
+    </style>
+
+</head>
+<body>
+    <div id="square"></div>
+
+    <script src="Scripts/jquery-1.9.1.js"></script>
+    <script src="Scripts/jquery.signalR-1.1.3.js"></script>
+    <script src="signalr/hubs"></script>
+    <script src="Scripts/jquery-ui-1.10.3.js"></script>
+
+    <script type="text/javascript">
+
+        var $square = $("#square");
+        var shapeManager = $.connection.shapeManagerHub;
+
+        shapeManager.client.moveShape = function (x, y) {
+            $square.css({ left: x, top: y });
+        };
+        
+        $.connection.hub.start().done(function () {
+
+            $square.draggable({
+                drag: function () {
+                    shapeManager.server.shapeMoved(this.offsetLeft, this.offsetTop || 0);
+                }
+            });
+
+
+            $square.dblclick(function () {
+                shapeManager.server.reset();
+            });
+
+
+        });
+
+    </script>
+
+
+
+</body>
+</html>

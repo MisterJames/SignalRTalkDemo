@@ -1,0 +1,42 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title></title>
+    <style>
+        
+    </style>
+</head>
+<body>
+    <input id="myMessage" type="text" />
+    <button id="send">Send</button>
+    <ul id="helloMessage"></ul>
+
+    <script src="Scripts/jquery-1.10.2.js"></script>
+    <script src="Scripts/jquery.signalR-2.0.0.js"></script>
+    <script src="signalr/hubs"></script>
+
+    <script type="text/javascript">
+
+        $(function () {
+
+            var helloHub = $.connection.helloHub;
+
+            helloHub.client.hello = function (msg) {
+                $("#helloMessage").append("<li>" + msg + "</li>");
+            }
+
+            $.connection.hub.start().done(function () {
+
+                $("#send").click(function () {
+                    helloHub.server.hello($("#myMessage").val());
+                });
+
+            });
+
+        })
+
+    </script>
+
+
+</body>
+</html>
